@@ -6,7 +6,7 @@ const updateDetails = async (req, res, next) => {
     const id = req.userId;
     const { password, firstName, lastName } = req.body;
 
-    if (password.length > 0) {
+    if (password && password.length > 0) {
         return res.status(411).json({ msg: "Password is too short" });
     }
 

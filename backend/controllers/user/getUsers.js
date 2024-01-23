@@ -3,16 +3,16 @@ const { validateGetUsers } = require('./validators');
 
 const getUsers = async (req, res, next) => {
     // const id = req.userId;
-    const filter = req.query.filter || "";
+    const filter = (req.query.filter || "").toLowerCase().trim();
+
+    console.log(filter);
 
     const users = await User.find({
-        $or: [
-            {
+        $or: [{
                 firstName: {
                     $regex: filter
                 }
-            },
-            {
+            },{
                 lastName: {
                     $regex: filter
                 }
@@ -29,7 +29,12 @@ const getUsers = async (req, res, next) => {
 
     return res.status(200).json({
         msg: "Users found",
-        users
+        users: users.map(user => ({
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            _id: user._id
+        }))
     });
 }
 

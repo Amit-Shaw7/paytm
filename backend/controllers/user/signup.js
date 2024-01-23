@@ -1,7 +1,7 @@
 const { validateSignup } = require("./validators")
 
 const User = require('../../models/user');
-const { default: Account } = require("../../models/account");
+const Account = require("../../models/account");
 
 const signup = async (req, res, next) => {
     const validated = validateSignup.safeParse(req.body);
@@ -29,8 +29,8 @@ const signup = async (req, res, next) => {
         })
     }
     await Account.create({
-        balance : 1 + Math.random() * 10000,
-        userId : userSaved._id
+        balance: 1 + Math.random() * 10000,
+        userId: userSaved._id
     });
 
     return res.status(200).json({ msg: "User created" });

@@ -1,11 +1,11 @@
 const express = require('express');
-const { default: userRouter } = require('./users');
-const { default: accountRouter, route } = require('./accounts');
+const userRouter = require('./users');
+const accountRouter = require('./accounts');
 const router = express.Router();
 
 
-router.route('/user' , userRouter); 
-router.route('/account' , accountRouter);
+router.use('/user' , userRouter); 
+router.use('/account' , accountRouter);
 
 
 module.exports = router;
