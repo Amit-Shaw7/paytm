@@ -5,11 +5,10 @@ const cors = require('cors');
 const mainRouter = require("./routes/index");
 const connectToDB = require("./db");
 const PORT = process.env.PORT || 4000;
-const DB_URI = process.env.MONGO_URI;
 
 
 const app = express();
-connectToDB(DB_URI);
+connectToDB();
 
 app.use(express.json());
 app.use(cors());

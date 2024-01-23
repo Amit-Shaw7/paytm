@@ -1,4 +1,5 @@
-const { default: Account } = require('../../models/account');
+const { default: mongoose } = require('mongoose');
+const Account = require('../../models/account');
 const { validateTransferAmount } = require('./validators');
 
 const transferAmount = async (req, res, next) => {
@@ -56,16 +57,18 @@ const transferAmountBetter = async (req, res, next) => {
 
     if (!account || account.balance < amount) {
         await session.abortTransaction();
-        console.log("Insufficient balance")
-        return;
+        return res.status(400).json({
+            msg: "Insufficient funds"
+        });
     }
 
     const toAccount = await Account.findOne({ userId: to }).session(session);
 
     if (!toAccount) {
         await session.abortTransaction();
-        console.log("Invalid account")
-        return;
+        return res.status(400).json({
+            msg: "Invalid account"
+        });
     }
 
     // Perform the transfer
@@ -75,6 +78,9 @@ const transferAmountBetter = async (req, res, next) => {
     // Commit the transaction
     await session.commitTransaction();
     console.log("done")
+    return res.status(200).json({
+        msg: "Transfer successfull",
+    });
 }
 
-module.exports = {transferAmount, transferAmountBetter} ;
+module.exports = { transferAmount, transferAmountBetter };
