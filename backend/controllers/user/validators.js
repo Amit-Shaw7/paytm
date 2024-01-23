@@ -12,12 +12,7 @@ const validateSignIn = zod.object({
     password : zod.string().minLength(6)
 });
 
-const validateGetUsers = zod.object({
-    filter : zod.string()
-})
-
 module.exports = {
     validateSignup,
     validateSignIn,
-    validateGetUsers
 }

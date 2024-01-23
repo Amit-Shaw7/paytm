@@ -1,27 +1,36 @@
-const { validateSignup } = require("./validators")
-
 const User = require('../../models/user');
+const { validateGetUsers } = require('./validators');
 
-const updateDetails = async (req, res, next) => {
-    const id = req.userId;
-    const { filter } = req.quer;
+const getUsers = async (req, res, next) => {
+    // const id = req.userId;
+    const filter = req.query.filter || "";
 
-    if (password.length > 0) {
-        return res.status(411).json({ msg: "Password is too short" });
+    const users = await User.find({
+        $or: [
+            {
+                firstName: {
+                    $regex: filter
+                }
+            },
+            {
+                lastName: {
+                    $regex: filter
+                }
+            }
+        ]
+    });
+
+    if (!users || users.length === 0) {
+        return res.status(200).json({
+            msg: "Users found",
+            users: []
+        });
     }
 
-    const user = await User.findById(id);
-    if (!user) {
-        return res.status(404).json({ msg: "User not found" });
-    }
-
-    password && (user.password = password);
-    firstName && (user.firstName = firstName);
-    lastName && (user.lastName = lastName);
-
-    await user.save();
-
-    return res.status(200).json({ msg: "User updated" });
+    return res.status(200).json({
+        msg: "Users found",
+        users
+    });
 }
 
-module.exports = updateDetails;
+module.exports = getUsers;
