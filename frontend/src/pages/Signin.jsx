@@ -1,9 +1,16 @@
 import React from 'react'
 import Input from '../components/Input'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
+import { login } from '../apiCalls/user'
+import { useSetRecoilState } from 'recoil'
+import userState from '../store/user'
 
 const Signin = () => {
+  const setUser = useSetRecoilState(userState);
+  
+  const navigate = useNavigate();
+
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -14,10 +21,21 @@ const Signin = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password);
     // send data to backend
+    const data = {
+      email,
+      password
+    };
+
+    const response = await login(data);
+    if(response.status === 200){
+      console.log(response.data.user);
+      setUser(response.data.user);
+      localStorage.setItem("token", response.data.token);
+      navigate("/dashboard");
+    }
   }
 
 

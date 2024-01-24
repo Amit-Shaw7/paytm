@@ -1,9 +1,8 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import Avatar from './Avatar'
 import Button from './Button'
 
-const UserItem = ({ name }) => {
+const UserItem = ({ name ,id, openSendMoneyModal}) => {
     return (
         <li className='flex items-center justify-between'>
             <div className='flex items-center gap-5'>
@@ -17,6 +16,7 @@ const UserItem = ({ name }) => {
                 fullWidth={false}
                 size="small"
                 type="button"
+                onClick={() => openSendMoneyModal(id)}
             >
                 Send Money
             </Button>
@@ -26,6 +26,8 @@ const UserItem = ({ name }) => {
 
 UserItem.propTypes = {
     name: PropTypes.string.isRequired,
+    openSendMoneyModal : PropTypes.func,
+    id : PropTypes.string
 }
 
 export default UserItem

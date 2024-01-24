@@ -1,4 +1,3 @@
-import React from 'react'
 import Avatar from './Avatar'
 import userState from '../store/user'
 import { useRecoilValue } from 'recoil'

@@ -9,7 +9,7 @@ const signin = async (req, res, next) => {
         return res.status(400).json({ msg: validated.error });
     }
 
-    const user = await User.findOne({ username: validated.data.username });
+    const user = await User.findOne({ email: validated.data.email });
     if (!user) {
         return res.status(404).json({ msg: "User Not Found" });
     }

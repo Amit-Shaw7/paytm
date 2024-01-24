@@ -10,13 +10,13 @@ const signup = async (req, res, next) => {
         return res.status(400).json({ masg: validated.error });
     }
 
-    const user = await User.findOne({ username: validated.data.username });
+    const user = await User.findOne({ username: validated.data.email });
     if (user) {
         return res.status(400).json({ msg: "User already exists" });
     }
 
     const newUser = new User({
-        username: validated.data.username,
+        email: validated.data.email,
         firstName: validated.data.firstName,
         lastName: validated.data.lastName,
         password: validated.data.password

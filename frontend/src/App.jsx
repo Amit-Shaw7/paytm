@@ -7,11 +7,13 @@ const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/signup" element={<Signup />} />
-        <Route exact path="/signin" element={<Signin />} />
-        <Route exact path="/dashboard" element={<Dashboard />} />
-      </Routes>
+      <React.Suspense fallback="loading ...">
+        <Routes>
+          <Route path="/signup" element={<Signup />} />
+          <Route exact path="/signin" element={<Signin />} />
+          <Route exact path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </React.Suspense>
     </BrowserRouter>
   )
 }

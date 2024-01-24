@@ -1,9 +1,12 @@
 import React from 'react'
 import Input from '../components/Input'
 import Button from '../components/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { singnup } from '../apiCalls/user';
 
 const Signup = () => {
+    const navigate = useNavigate();
+
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
     const [email, setEmail] = React.useState('');
@@ -22,11 +25,22 @@ const Signup = () => {
         setPassword(event.target.value);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(firstName, lastName, email, password);
         // send data to backend
+        const data = {
+            firstName,
+            lastName,
+            email,
+            password
+        }
+        const response = await singnup(data);
+        if (response.status === 200) {
+            navigate('/signin');
+        }
     }
+    
     return (
         <div className='min-h-screen w-full flex items-center justify-center'>
             <div className='w-[300px] shadow-md p-5 flex flex-col gap-3'>
@@ -45,6 +59,7 @@ const Signup = () => {
                         htmlFor='firstName'
                         id='firstName'
                         required={true}
+                        size="small"
                     />
 
                     <Input
@@ -56,6 +71,7 @@ const Signup = () => {
                         htmlFor='lastName'
                         id='lastName'
                         required={true}
+                        size="small"
                     />
 
                     <Input
@@ -67,6 +83,7 @@ const Signup = () => {
                         htmlFor='email'
                         id='email'
                         required={true}
+                        size="small"
                     />
 
                     <Input
@@ -78,6 +95,7 @@ const Signup = () => {
                         htmlFor='password'
                         id='password'
                         required={true}
+                        size="small"
                     />
 
                     <Button

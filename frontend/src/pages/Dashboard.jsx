@@ -3,59 +3,81 @@ import Navbar from '../components/Navbar'
 import Input from '../components/Input';
 import UserItem from '../components/UserItem';
 import userState from '../store/user';
-import { getProfile } from '../apiCalls/user';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import balanceState from '../store/balance';
+import { useNavigate } from 'react-router-dom';
+import SendMoney from '../components/SendMoney';
 
 const Dashboard = () => {
-    const [user , setUser] = useRecoilState(userState);
+    const balance = useRecoilValue(balanceState);
+    const user = useRecoilValue(userState);
 
-    const fetchUser = async () => {
-        const response = await getProfile();
-        if (response.status === 200) {
-            setUser(response.data);
-        }
-    }
-    React.useEffect(() => {
-        fetchUser();
-    }, []);
+    
+
+    console.log(user);
+
+    const navigate = useNavigate();
 
     const [searchText, setSearchText] = React.useState("");
+    const [open, setOpen] = React.useState(false);
+    const [friendId, setFriend] = React.useState("");
+
+
     const handleSearchText = (event) => {
         setSearchText(event.target.value);
     }
 
+    const handleClose = () => {
+        setOpen(false);
+    }
+    const handleOpen = (id) => {
+        setOpen(true);
+        setFriend(id)
+    }
+
+    React.useEffect(() => {
+        if (!user) {
+            navigate("/login");
+        }
+    }, [user, navigate]);
+
     return (
-        <div className='h-full w-full'>
-            <Navbar />
+        <>
+            <div className='h-full w-full relative'>
+                <Navbar />
 
-            <div className='mt-5 flex flex-col justify-center gap-10 px-10'>
-                <p className='mt-3 text-3xl font-bold'>Your balance : {balance}</p>
+                <div className='mt-5 flex flex-col justify-center gap-10 px-10'>
+                    <p className='mt-3 text-3xl font-bold'>Your balance : {balance}</p>
 
-                <div className='flex flex-col gap-5'>
-                    <p className='text-3xl font-bold'>Users</p>
-                    <Input
-                        value={searchText}
-                        onChange={handleSearchText}
-                        placeholder="Search users..."
-                        required={true}
-                        id='search'
-                        type='text'
-                        size='large'
-                    />
-                </div>
+                    <div className='flex flex-col gap-5'>
+                        <p className='text-3xl font-bold'>Users</p>
+                        <Input
+                            value={searchText}
+                            onChange={handleSearchText}
+                            placeholder="Search users..."
+                            required={true}
+                            id='search'
+                            type='text'
+                            size='large'
+                        />
+                    </div>
 
-                <div className='flex flex-col gap-3'>
-                    {
-                        users.map((user) => (
-                            <UserItem
-                                key={user._id}
-                                name={user.firstName}
-                            />
-                        ))
-                    }
+                    <div className='flex flex-col gap-3'>
+                        {
+                            users.map((user) => (
+                                <UserItem
+                                    key={user._id}
+                                    name={user.firstName}
+                                    id={user._id}
+                                    openSendMoneyModal={handleOpen}
+                                />
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
+            <SendMoney open={open} handleClose={handleClose} id={friendId}/>
+        </>
     )
 }
 

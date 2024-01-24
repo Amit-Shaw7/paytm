@@ -18,8 +18,9 @@ const Input = ({ label, value, onChange, type, placeholder, htmlFor, id, size, r
                     border
                     border-gray-300
                     rounded-md
-                    font-semibold
+                    font-[500]
                 `}
+                autoComplete='on'
                 required={required}
                 type={type}
                 value={value}
@@ -41,6 +42,6 @@ Input.propTypes = {
     placeholder: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     htmlFor: PropTypes.string,
-    size: PropTypes.string.isRequired,
-    required: PropTypes.string.isRequired,
+    size: PropTypes.string,
+    required: PropTypes.bool.isRequired,
 }
